@@ -10,6 +10,10 @@ from PIL import Image, ImageDraw, ImageFont
 from io import BytesIO
 from diffusers import StableDiffusionImg2ImgPipeline
 
+def allowed_file(filename):
+    ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
 app = Flask(__name__)
 
 with open("config.json") as f:
@@ -25,17 +29,32 @@ generator = torch.Generator(cfg['device']).manual_seed(seed)
 @app.route('/generate-img', methods=['POST'])
 
 def generate_img():
-    # Get the inputs from the request
-    data = request.json
-    prompt = data['prompt']
-    image = Image.open(data['image']).convert("RGB").resize((768,768))
-    hexcode = data['hexcode']
-    
-    output = pipe(prompt=prompt, negative_prompt=hexcode, image=image, generator=generator).images[0]
-    buffered = BytesIO()
-    output.save(buffered, format="PNG")
-    img_str = base64.b64encode(buffered.getvalue())
-    return img_str 
+    try:
+        # Get the inputs from the request
+        prompt = request.form['prompt']
+        image = request.files['image']
+        hexcode = request.form['hexcode']
+
+        if image and allowed_file(image.filename):
+            # Convert and process the image
+            image = Image.open(image)
+            image = image.convert("RGB")
+            image = image.resize((768, 768))
+
+            output = pipe(prompt=prompt, negative_prompt=hexcode, image=image, generator=generator).images[0]
+
+            buffered = BytesIO()
+            output.save(buffered, format="PNG")
+            img_str = base64.b64encode(buffered.getvalue()).decode('utf-8')
+
+            # Render the HTML template and pass the base64 image data
+            return render_template('image.html', gen_image=img_str)
+
+        else:
+            return jsonify({"error": "Invalid image format or missing image"})
+
+    except Exception as e:
+        return jsonify({"error": str(e)})
 
 def draw_canvas():
     # Load the provided images
@@ -136,4 +155,4 @@ def generate_ad():
         return jsonify({"error": str(e)})
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, port=8080)
