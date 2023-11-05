@@ -1,10 +1,5 @@
 {
     "device": "cuda",
     "model" : "stabilityai/stable-diffusion-2-1",
-    "allowed_extensions": ["jpg", "jpeg", "png", "gif"],
-    "font-family": "content/DMSerifDisplay-Regular.ttf",
-    "font-large": 20,
-    "font-small": 15,
-    "canvas-color": [255, 255, 255]
-
+    "allowed_extensions": ["jpg", "jpeg", "png", "gif"]
 }
