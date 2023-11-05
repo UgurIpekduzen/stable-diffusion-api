@@ -2,31 +2,17 @@ from flask import Flask, request, render_template, jsonify
 from PIL import Image
 from io import BytesIO
 import base64
-import os
 import json
 import torch
-import requests
-from PIL import Image, ImageDraw, ImageFont
+
+from PIL import Image
 from io import BytesIO
-from diffusers import StableDiffusionImg2ImgPipeline
-
-with open("config.json") as f:
-    cfg = json.loads(f.read())
-
-def allowed_file(filename):
-    ALLOWED_EXTENSIONS = set(cfg['allowed_extensions'])
-    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 assert torch.cuda.is_available()
 
 torch.cuda.empty_cache()
 
 app = Flask(__name__)
-
-pipe = StableDiffusionImg2ImgPipeline.from_pretrained(cfg['model'], torch_dtype=torch.float32).to(cfg['device'])
-
-seed = torch.randint(0, 1000000, (1,)).item()
-generator = torch.Generator(cfg['device']).manual_seed(seed)
 
 @app.route('/generate-img', methods=['POST'])
 
@@ -94,14 +80,6 @@ def generate_ad():
 color = "#316346"
 punchline_text = "AI ad banners lead to higher conversations ratesxxxx"
 button_text = "Call to action text here! >"
-
-ad = AdGenerator(generated_image)
-ad.draw_border(color)
-ad.add_logo("logo1.png")
-ad.add_image("photo1.png")
-ad.add_punchline(punchline_text, text_color=color)
-ad.add_button(color, button_text)
-ad.display_ad()
 
 
 if __name__ == '__main__':
