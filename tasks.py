@@ -1,10 +1,15 @@
 
+from flask import render_template, jsonify
 import json
 import torch
+from pathlib import Path
 from PIL import Image
 from io import BytesIO
 from diffusers import StableDiffusionImg2ImgPipeline
 from ad_generator import AdGenerator
+import base64
+import posixpath, ntpath, json
+from pathlib import Path
 
 with open("config.json") as f:
     cfg = json.loads(f.read())
@@ -27,41 +32,40 @@ def generate_img(prompt, image, hexcode):
         image = image.resize((768, 768))
 
         output = pipe(prompt=prompt, negative_prompt=hexcode, image=image, generator=generator).images[0]
+        # image_name = 'generated.png'
+        # dirpath = Path(cfg["image_path"])
+        # save_path = (dirpath / image_name).as_posix().replace(ntpath.sep, posixpath.sep)
+        # print(save_path)
+        # output.save(save_path)
 
-        buffered = BytesIO()
-        output.save(buffered, format="PNG")
-        img_str = base64.b64encode(buffered.getvalue())
-        return jsonify({"ad_image": img_str.decode('utf-8')})
+        return output
+    else:
+        return None
+        # buffered = BytesIO()
+        # output.save(buffered, format="PNG")
+        # img_str = base64.b64encode(buffered.getvalue())
+        # return jsonify({"ad_image": img_str.decode('utf-8')})
         
         # img_str = base64.b64encode(buffered.getvalue()).decode('utf-8')
-        # return render_template('image.html', gen_image=img_str)
+        
+    #     return render_template('image.html', gen_image=image_name)
 
-    else:
-        return jsonify({"error": "Invalid image format or missing image"})
+    # else:
+    #     return jsonify({"error": "Invalid image format or missing image"})
 
     
 def generate_ad(image, logo, hexcode, punchline, button):
 
     if logo and allowed_file(logo.filename):
-        # Convert and process the image
-        logo = Image.open(logo)
-        logo = logo.convert("RGB")
-        logo = logo.resize((768, 768))
         
         ad = AdGenerator(image)
         ad.draw_border(hexcode)
-        ad.add_logo("logo1.png")
+        ad.add_logo(logo)
         ad.add_image("photo1.png")
-        ad.add_punchline(punchline, text_color=hexcode)
+        ad.add_punchline(punchline, hexcode)
         ad.add_button(hexcode, button)
+        output = ad.get_canvas()
 
-        buffered = BytesIO()
-        output.save(buffered, format="PNG")
-        img_str = base64.b64encode(buffered.getvalue())
-        return jsonify({"ad_image": img_str.decode('utf-8')})
-        
-        # img_str = base64.b64encode(buffered.getvalue()).decode('utf-8')
-        # return render_template('image.html', gen_image=img_str)
-
+        return output
     else:
-        return jsonify({"error": "Invalid image format or missing image"})
+        return None

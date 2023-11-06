@@ -1,5 +1,0 @@
-{
-    "device": "cuda",
-    "model" : "stabilityai/stable-diffusion-2-1",
-    "allowed_extensions": ["jpg", "jpeg", "png", "gif"]
-}
