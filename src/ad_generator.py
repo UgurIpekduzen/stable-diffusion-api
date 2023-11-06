@@ -38,12 +38,10 @@ class AdGenerator:
 
         self.draw.rectangle([frame_thickness, frame_thickness, self.canvas.width - frame_thickness, self.canvas.height - frame_thickness], outline=(0,0,0), width=frame_thickness*2)
     
-    def add_image(self, image_path):
+    def add_image(self, image):
         # Place the logo at the top
-        image = Image.open(image_path)
+        # image = Image.open(image_path)
         self.canvas.paste(image, ((self.canvas.width - image.width) // 2, (self.canvas.height - image.width) // 3))
-        # self.canvas
-
     def add_logo(self, logo_path):
         logo = Image.open(logo_path)
         self.canvas.paste(logo, (int((self.canvas.width - logo.width) / 2), 20))

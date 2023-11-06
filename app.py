@@ -1,8 +1,8 @@
-from flask import Flask, request, jsonify, send_file, Response
-from PIL import Image
-from io import BytesIO
-import base64
-import torch
+# from flask import Flask, request, jsonify, send_file, Response
+# from PIL import Image
+# from io import BytesIO
+# import base64
+# import torch
 
 # from PIL import Image
 # from io import BytesIO
@@ -82,15 +82,10 @@ import torch
 #     app.run(debug=True, port=8080)
 
 from flask import Flask, request, jsonify, send_file
-from PIL import Image
-from io import BytesIO
-import base64
 import torch
 import os
 
-from PIL import Image
-from io import BytesIO
-from tasks import generate_ad, generate_img
+from src.tasks import generate_ad, generate_img
 
 assert torch.cuda.is_available()
 torch.cuda.empty_cache()
@@ -101,22 +96,17 @@ app = Flask(__name__)
 def img2img_api():
     try:
         # Get the inputs from the request
-        prompt = request.form['prompt']
+        # prompt = request.form['prompt']
         image = request.files['image']
-        aiimg_hexcode = request.form['aiimg_hexcode']
+        # aiimg_hexcode = request.form['aiimg_hexcode']
         logo = request.files['logo']
         adimg_hexcode = request.form['adimg_hexcode']
         punchline = request.form['punchline']
         button = request.form['button']
     
-        gen_image = generate_img(image=image, prompt=prompt, hexcode=aiimg_hexcode)
-        img_name = generate_ad(image=gen_image, logo=logo, hexcode=adimg_hexcode, punchline=punchline, button=button)
-        # if gen_image:
-        #     save_path = os.path.join("images", "generated.png")
-        #     gen_image.save(save_path)
-        #     return send_file(save_path, mimetype="image/png")
-        # else:
-        #     return jsonify({"error": "Image generation failed."})
+        # gen_image = generate_img(image=image, prompt=prompt, hexcode=aiimg_hexcode)
+        img_name = generate_ad(image=image, logo=logo, hexcode=adimg_hexcode, punchline=punchline, button=button)
+
         if img_name:
             save_path = os.path.join("images", "ad_image.png")
             img_name.save(save_path)
