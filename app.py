@@ -96,23 +96,33 @@ app = Flask(__name__)
 def img2img_api():
     try:
         # Get the inputs from the request
-        # prompt = request.form['prompt']
+        prompt = request.form['prompt']
         image = request.files['image']
-        # aiimg_hexcode = request.form['aiimg_hexcode']
+        aiimg_hexcode = request.form['aiimg_hexcode']
         logo = request.files['logo']
         adimg_hexcode = request.form['adimg_hexcode']
         punchline = request.form['punchline']
         button = request.form['button']
-    
-        # gen_image = generate_img(image=image, prompt=prompt, hexcode=aiimg_hexcode)
-        img_name = generate_ad(image=image, logo=logo, hexcode=adimg_hexcode, punchline=punchline, button=button)
 
-        if img_name:
-            save_path = os.path.join("images", "ad_image.png")
-            img_name.save(save_path)
-            return send_file(save_path, mimetype="image/png")
-        else:
-            return jsonify({"error": "Image generation failed."})
+        gen_image = generate_img(image, prompt, aiimg_hexcode)
+        # ad_image = generate_ad(image, logo, adimg_hexcode, punchline, button)
+
+        # if gen_image and ad_image:
+        #     # Save the generated ad_image
+        #     save_path = os.path.join("images", "ad_image.png")
+        #     ad_image.save(save_path)
+
+        #     # Return the generated image as a response
+        #     return send_file(save_path, mimetype="image/png")
+        # else:
+        #     return jsonify({"error": "Image generation failed."})
+
+        #  Save the generated ad_images
+        save_path = os.path.join("images", "gen_image.png")
+        gen_image.save(save_path)
+
+        # Return the generated image as a response
+        return send_file(save_path, mimetype="image/png")
     except Exception as e:
         return jsonify({"error": str(e)})
 
