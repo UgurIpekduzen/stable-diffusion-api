@@ -1,7 +1,12 @@
 {
     "font": "./content/DMSerifDisplay-Regular.ttf",
     "device": "cuda",
-    "model" : "stabilityai/stable-diffusion-2-1",
+    "model" :"stabilityai/stable-diffusion-xl-refiner-1.0",
+    "strength": 0.45, 
+    "guidance_scale": 10.5,
     "allowed_extensions": ["jpg", "jpeg", "png", "gif"],
-    "image_path": "./images/"
+    "image_upload_folder": "./images/",
+    "gen_img_name": "gen_image.png",
+    "ad_img_name": "ad_image.png",
+    "api-html-page": "index.html" 
 }
