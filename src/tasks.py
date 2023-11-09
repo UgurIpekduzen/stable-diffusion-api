@@ -1,44 +1,49 @@
 from flask import jsonify
 import json
 import torch
-from PIL import Image
 from diffusers import AutoPipelineForImage2Image
 from .ad_generator import AdGenerator
+from PIL import Image
+from .editing import closest_color, convert_to_rgb
 
 with open("config.json") as f:
     cfg = json.loads(f.read())
 
 pipe = AutoPipelineForImage2Image.from_pretrained(cfg['model'], torch_dtype=torch.float16, variant="fp16", use_safetensors=True).to("cuda")
-def allowed_file(filename):
-    return '.' in filename and filename.rsplit('.', 1)[1].lower() in set(cfg['allowed_extensions'])
 
 seed = torch.randint(0, 1000000, (1,)).item()
 generator = torch.Generator(cfg['device']).manual_seed(seed)
 
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in set(cfg['allowed_extensions'])
+
 def generate_img(image, prompt, hexcode):
     try: 
-        if image and allowed_file(image.filename):
-            # Convert and process the image
-            image = Image.open(image)
-            image = image.convert("RGB")
-            output = pipe(prompt=prompt, negative_prompt=hexcode, image=image, generator=generator, strength=cfg['strength'], ).images[0]
-            
-            return output  # Image nesnesini dön
+        image = Image.open(image)
+        image = image.convert("RGB")
+        
+        prompt += closest_color(convert_to_rgb(hexcode))
+        
+        output = pipe(prompt=prompt 
+                        ,image=image, generator=generator 
+                        # ,strength=cfg['strength'], 
+                        # ,guidance_scale=cfg['guidance_scale']
+                    ).images[0]
+        
+        return output 
     except Exception as e:
         return jsonify({"error": str(e)})
 
 def generate_ad(image, logo, hexcode, punchline, button):
     try: 
-        if logo and allowed_file(logo.filename):
-            # image = Image.open(image)
-            ad = AdGenerator(image)
-            ad.draw_border(hexcode)
-            ad.add_logo(logo)
-            ad.add_image(image)
-            ad.add_punchline(punchline, hexcode)
-            ad.add_button(hexcode, button)
-            output = ad.get_canvas()
+        ad = AdGenerator()
+        ad.draw_border(hexcode)
+        ad.add_logo(logo)
+        ad.add_image(image)
+        ad.add_punchline(punchline, hexcode)
+        ad.add_button(hexcode, button)
+        output = ad.get_canvas()
 
-            return output  # Image nesnesini dön
+        return output 
     except Exception as e:
         return jsonify({"error": str(e)})

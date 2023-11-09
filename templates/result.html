@@ -10,6 +10,8 @@
         <div class="thumbnail mt-4">
             <img src="{{ url_for('show_result', filename=result) }}" alt="Generated Image" class="img-fluid">
         </div>
+        <a href="/" class="btn btn-primary mt-3">Generate New</a> 
+        <a href="{{ url_for('download_result', filename=result) }}" class="btn btn-success mt-3">Download Image</a>
     </div>
 </body>
 </html>

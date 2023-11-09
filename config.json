@@ -8,5 +8,7 @@
     "image_upload_folder": "./images/",
     "gen_img_name": "gen_image.png",
     "ad_img_name": "ad_image.png",
-    "api-html-page": "index.html" 
+    "api-html-page": "index.html",
+    "gen_image_size": [300, 300],
+    "logo_image_size": [90, 50]
 }
