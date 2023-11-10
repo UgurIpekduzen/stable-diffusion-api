@@ -44,6 +44,3 @@ def img2img_api():
         return render_template('result.html', result=cfg['ad_img_name'])
     else:
         return render_template('index.html')
-
-if __name__ == '__main__':
-    app.run(debug=True, host="0.0.0.0", port=5000)
