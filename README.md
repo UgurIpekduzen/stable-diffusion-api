@@ -30,15 +30,3 @@ Traditional methods of creating advertisements can be time-consuming and costly.
     `python app.py`
 5. Open your browser and go to http://localhost:5000.
 6. Fill out the form on the web page to generate the ad.
-
-## Deployment on Google Cloud Platform
-To deploy this project on GCP for scalable and reliable hosting, follow these steps:
-
-1. [Create a GCP account](https://cloud.google.com/).
-2. [Install the Google Cloud SDK](https://cloud.google.com/sdk/docs/install).
-3. Set up a GCP project and enable the necessary APIs.
-4. Deploy the project to Google Cloud Run:
-`gcloud builds submit --tag gcr.io/your-project-id/ad-generator`
-`gcloud run deploy --image gcr.io/your-project-id/ad-generator --platform managed`
-
-Replace your-project-id with your actual GCP project ID.
