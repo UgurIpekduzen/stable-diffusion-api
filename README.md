@@ -27,6 +27,6 @@ Traditional methods of creating advertisements can be time-consuming and costly.
     `source venv/bin/activate`
     `pip install -r requirements.txt`
 4. Run the app:
-    `python app.py`
+    `gunicorn wsgi:app -b 0.0.0.0:5000`
 5. Open your browser and go to http://localhost:5000.
 6. Fill out the form on the web page to generate the ad.
