@@ -19,9 +19,9 @@ Traditional methods of creating advertisements can be time-consuming and costly.
 ## How to Use
 
 1. Clone the project to your computer:
-    `git clone https://github.com/user/ad-generator.git`
+    `git clone https://github.com/user/stable-diffusion-api.git`
 2. Navigate to the project directory:
-    `cd ad-generator`
+    `cd stable-diffusion-api`
 3. Create a virtual environment and install the libraries:
     `python -m venv venv`
     `source venv/bin/activate`
