@@ -1,1 +1,3 @@
 runtime: python310
+
+entrypoint: gunicorn -b :$PORT wsgi:app

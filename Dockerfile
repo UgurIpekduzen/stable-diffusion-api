@@ -6,7 +6,7 @@ RUN apt-get update
 RUN apt-get dist-upgrade -y
 RUN apt-get install software-properties-common -y 
 RUN add-apt-repository ppa:deadsnakes/ppa
-RUN apt-get install python3.11 -y
+RUN apt-get install python3.10 -y
 
 RUN apt-get update
 RUN apt-get install python3-pip -y
