@@ -1,7 +1,7 @@
 from flask import jsonify
 import json
 import torch
-from diffusers import AutoPipelineForImage2Image
+from diffusers import StableDiffusionInstructPix2PixPipeline,  EulerAncestralDiscreteScheduler
 from .ad_generator import AdGenerator
 from PIL import Image
 from .tools import closest_color, convert_to_rgb
@@ -11,7 +11,8 @@ with open("config.json") as f:
     cfg = json.loads(f.read())
 
 # Load the model
-pipe = AutoPipelineForImage2Image.from_pretrained(cfg['model'], torch_dtype=torch.float16, variant="fp16", use_safetensors=True).to("cuda")
+pipe = StableDiffusionInstructPix2PixPipeline.from_pretrained(cfg['model'], torch_dtype=torch.float32, safety_checker=None).to(cfg['device'])
+pipe.scheduler = EulerAncestralDiscreteScheduler.from_config(pipe.scheduler.config)
 
 # Set the seed for random number generation
 seed = torch.randint(0, 1000000, (1,)).item()
@@ -35,7 +36,12 @@ def generate_img(image, prompt, hexcode):
         prompt += closest_color(convert_to_rgb(hexcode))
     
         # Generate the new image
-        output = pipe(prompt=prompt, image=image, generator=generator).images[0]
+        output = pipe(prompt=prompt, 
+                      image=image, 
+                      generator=generator, 
+                      num_inference_steps=cfg['num_inference_steps'], 
+                      image_guidance_scale=cfg['image_guidance_scale'],
+                      guidance_scale=cfg['guidance_scale']).images[0]
         
         return output 
     except Exception as e:

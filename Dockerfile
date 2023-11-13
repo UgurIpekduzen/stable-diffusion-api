@@ -19,4 +19,6 @@ COPY . /app
 
 RUN python3.11 -m pip install --upgrade pip; pip install -r requirements.txt
 
-CMD ["gunicorn", "wsgi:app", "-b", "0.0.0.0:5000"]
+# CMD ["gunicorn", "wsgi:app", "-b", "0.0.0.0:5000"]
+
+CMD ["python3", "app.py"]
