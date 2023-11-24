@@ -10,25 +10,26 @@ Traditional methods of creating advertisements can be time-consuming and costly.
 
 ## Technologies Used
 
-- Python
+- Python: 3.10.12
+- NVIDIA CUDA: 12.3
 - Flask: Used to build the web application.
 - PyTorch and Stable Diffusion(Img2Img): Utilized for image generation processes.
 - HTML and CSS: Employed for creating web page templates.
 
 ## How to Use
-
-1. Clone the project to your computer:
+1. Make sure you have a NVIDIA GPU with CUDA support.
+2. Clone the project to your computer:
     `git clone https://github.com/user/stable-diffusion-api.git`
-2. Navigate to the project directory:
+3. Navigate to the project directory:
     `cd stable-diffusion-api`
-3. Create a virtual environment and install the libraries:
+4. Create a virtual environment and install the libraries:
     `python -m venv venv`
     `source venv/bin/activate`
     `pip install -r requirements.txt`
-4. Run the app:
+5. Run the app:
     `python app.py`
-5. Open your browser and go to http://localhost:5000.
-6. Fill out the form on the web page to generate the ad.
+6. Open your browser and go to http://localhost:5000.
+7. Fill out the form on the web page to generate the ad.
 
 - **Docker:** In Development
 - **Google Cloud Platform:** In Development
