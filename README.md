@@ -14,7 +14,6 @@ Traditional methods of creating advertisements can be time-consuming and costly.
 - Flask: Used to build the web application.
 - PyTorch and Stable Diffusion(Img2Img): Utilized for image generation processes.
 - HTML and CSS: Employed for creating web page templates.
-- Google Cloud Platform (GCP): Deployed on GCP for scalable and reliable cloud hosting.
 
 ## How to Use
 
@@ -30,3 +29,29 @@ Traditional methods of creating advertisements can be time-consuming and costly.
     `python app.py`
 5. Open your browser and go to http://localhost:5000.
 6. Fill out the form on the web page to generate the ad.
+
+- **Docker:** In Development
+- **Google Cloud Platform:** In Development
+
+## Example Usages
+### Example 1: 
+- **Generated Image:**
+    - **Prompt:** "Starbucks coffee cup placed on marble tabletop in the rose garden, floral background, 8k, ultra realistic, realistic shadows, background color: "
+    - **Hexcode:** `#FF0000`
+- **Generated Ad:**
+    - **Hexcode:** `#316346`
+    - **Punchline:** "AI ad banners lead to higher conversations ratesxxxx"
+    - **Button:** "Call to action text here! >"
+
+![example_1](example_1.jpg)
+
+### Example 2: 
+- **Generated Image:**
+    - **Prompt:** "Coffee cup placed on a glass tabletop in the winter resort, snowy background, 8k, ultra realistic, realistic shadows, cup color: "
+    - **Hexcode:** `#FF6900`
+- **Generated Ad:**
+    - **Hexcode:** `#316346`
+    - **Punchline:** "AI ad banners lead to higher conversations ratesxxxx"
+    - **Button:** "Call to action text here! >"
+
+![example_2](example_2.jpg)

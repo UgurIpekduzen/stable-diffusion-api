@@ -5,6 +5,7 @@ from diffusers import StableDiffusionInstructPix2PixPipeline,  EulerAncestralDis
 from .ad_generator import AdGenerator
 from PIL import Image
 from .tools import closest_color, convert_to_rgb
+from random import randint, uniform
 
 # Read the configuration file
 with open("config.json") as f:
@@ -13,10 +14,6 @@ with open("config.json") as f:
 # Load the model
 pipe = StableDiffusionInstructPix2PixPipeline.from_pretrained(cfg['model'], torch_dtype=torch.float32, safety_checker=None).to(cfg['device'])
 pipe.scheduler = EulerAncestralDiscreteScheduler.from_config(pipe.scheduler.config)
-
-# Set the seed for random number generation
-seed = torch.randint(0, 1000000, (1,)).item()
-generator = torch.Generator(cfg['device']).manual_seed(seed)
 
 # Generate a new image using the Img2Img algorithm of Stable Diffusion
 def generate_img(image, prompt, hexcode):
@@ -31,17 +28,20 @@ def generate_img(image, prompt, hexcode):
         # Open and convert the input image to RGB format
         image = Image.open(image)
         image = image.convert("RGB")
-        
         # Add the provided color to the prompt
         prompt += closest_color(convert_to_rgb(hexcode))
-    
+        # Set the seed for random number generation and hyperparameters
+        generator = torch.Generator(cfg['device']).manual_seed(cfg["generator_seed"])
+        nis = randint(cfg["nis_range"][0], cfg["nis_range"][1])
+        igs = uniform(cfg["igs_range"][0], cfg["igs_range"][1])
+        gs = uniform(cfg["gs_range"][0], cfg["gs_range"][1])
         # Generate the new image
         output = pipe(prompt=prompt, 
                       image=image, 
                       generator=generator, 
-                      num_inference_steps=cfg['num_inference_steps'], 
-                      image_guidance_scale=cfg['image_guidance_scale'],
-                      guidance_scale=cfg['guidance_scale']).images[0]
+                      num_inference_steps=nis, 
+                      image_guidance_scale=igs,
+                      guidance_scale=gs).images[0]
         
         return output 
     except Exception as e:
